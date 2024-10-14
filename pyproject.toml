@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "abacbs-2024-hackathon-agentic-wf"
+version = "0.1.0"
+description = "This repository contains the starter code for the omics/LLM challenge at the ABACBS 2024 Hackathon. In this challenge, participants will develop LLM-based agentic systems to parse unstructured metadata, such as sample information, into formats usable by bioinformatics workflows. The same approach can also enhance data interoperability across different projects. One anticipated outcome is that participants will be able to integrate LLM-based workflows into their ongoing bioinformatics projects, extending the benefits of LLM-powered automation beyond the scope of the hackathon."
+authors = ["Timo Lassmann <timolassmann@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
