@@ -19,7 +19,9 @@ args = parser.parse_args()
 # Initialize the LLM
 llm = Llama(
     model_path=args.model_path,
-    verbose=False
+    verbose=False,
+    n_gpu_layers = -1,
+    n_batch=512,
 )
 
 patched_llm = instructor.patch(
