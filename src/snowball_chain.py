@@ -19,9 +19,12 @@ args = parser.parse_args()
 # Initialize the LLM
 llm = Llama(
     model_path=args.model_path,
-    verbose=False,
+    verbose=True,
     n_gpu_layers = -1,
     n_batch=512,
+    cache_prompt=False,
+    n_ctx=16384,
+
 )
 
 patched_llm = instructor.patch(
@@ -38,9 +41,18 @@ class blog_hook(BaseModel):
             description="The hook for the blog post.",
     )
 
-class blog_paragraph(BaseModel):
-    blog_paragraph: str = Field(
-            description="The first paragraph of the blog post.",
+class blog_content(BaseModel):
+    blog_introduction: str = Field(
+            description="The introduction of the blog post.",
+    )
+    blog_background: str = Field(
+            description="A section providing background to the topic discussed in the blog post.",
+    )
+    blog_mainsection: str = Field(
+            description="The main body og the blog post.",
+    )
+    blog_conclusion: str = Field(
+            description="The conclusion.",
     )
 
 def get_blog_post_title(topic: str) -> blog_title:
@@ -48,7 +60,8 @@ def get_blog_post_title(topic: str) -> blog_title:
         response = patched_llm(
             response_model=blog_title,
             max_tokens=512,
-            temperature=0.1,
+            temperature=0.7,
+            max_retries=10,
             messages=[
                 {"role": "user", "content": f"""
                     Generate one blog post title about: {topic}.
@@ -69,9 +82,10 @@ def get_blog_hook(title: str) -> blog_hook:
         response = patched_llm(
             response_model=blog_hook,
             max_tokens=512,
-            temperature=0.1,
+            temperature=0.7,
+            max_retries=10,
             messages=[
-              #  {"role": "system", "content": "You are an expert in generating blog hooks. You respond in JSON and always include the hook."},
+                {"role": "system", "content": "You are an expert in generating blog hooks. You respond in JSON and always include the hook."},
                 {"role": "user",
                     "content":f"""
                         Generate one hook for the blog post title: {title}
@@ -88,21 +102,21 @@ def get_blog_hook(title: str) -> blog_hook:
 
     return response
 
-def get_blog_paragraph(title: str, hook: str) -> blog_paragraph:
+def get_blog_paragraph(title: str, hook: str) -> blog_content:
     with tqdm(total=100, desc="Generating blog paragraph", unit="%") as pbar:
         response = patched_llm(
-            response_model=blog_paragraph,
-            response_format={"type": "json_object"},
-            max_tokens=1024,
-            temperature=0.1,
+            response_model=blog_content,
+            max_tokens=2048,
+            temperature=0.7,
+            max_retries=10,
             messages=[
-              # {"role": "system", "content": "You are an expert in writing interesting blog posts. You respond in JSON and always include several paragraphs worth of content."},
+                {"role": "system", "content": "You are an expert in writing interesting blog posts. You respond in JSON and always include several paragraphs worth of content."},
                 {"role": "user", "content": f"""
                     Based on the TITLE:
                     {title}
                     and HOOK:
                     {hook}
-                    generate the first paragraph of the blog post.
+                    generate the full content of the blog post.
                     """},
             ],
         )
@@ -114,7 +128,6 @@ def get_blog_paragraph(title: str, hook: str) -> blog_paragraph:
 
     return response
 
-
 if __name__ == "__main__":
     try:
         # Use command-line arguments
@@ -123,6 +136,9 @@ if __name__ == "__main__":
         hook = get_blog_hook(title.blog_title)
         print(f"Hook: {hook.blog_hook}")
         paragraph = get_blog_paragraph(title.blog_title, hook.blog_hook)
-        print(f"Paragraph: {paragraph.blog_paragraph}")
+        print(f"Intro: {paragraph.blog_introduction}")
+        print(f"Background: {paragraph.blog_background}")
+        print(f"Main Section: {paragraph.blog_mainsection}")
+        print(f"Conclusion: {paragraph.blog_conclusion}")
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")
