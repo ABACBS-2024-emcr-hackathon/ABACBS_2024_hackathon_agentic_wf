@@ -110,6 +110,8 @@ Remember, deactivating the shell doesn't delete or modify your virtual environme
 
 This repository includes an example script (`src/snowball_chain.py`) that demonstrates a lightweight approach to constructing a prompt chain using a local LLM. This script serves as a basic demonstration of how to work with local LLMs and can be used as a starting point for more complex applications.
 
+The snowball prompt concept in this script was inspired by [this gist](https://gist.github.com/disler/d51d7e37c3e5f8d277d8e0a71f4a1d2e) by [disler](https://gist.github.com/disler).
+
 ### Key Features
 
 1. **Lightweight Prompt Chain**: The script showcases an extremely lightweight approach to constructing a prompt chain, where the output of one LLM call is used as input for the next call. This creates a "snowball effect" in generating content.
