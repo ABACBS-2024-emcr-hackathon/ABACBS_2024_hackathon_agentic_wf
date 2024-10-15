@@ -67,10 +67,11 @@ If you encounter any issues:
 
 To use this project, you'll need to download a GGUF-formatted language model. Here are some options:
 
-1. [Llama-3.2-3B-Instruct-Q8_0.gguf](https://huggingface.co/lmstudio-community/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf?download=true)
-2. [gemma-2-9b-it-Q4_K_M.gguf](https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true)
+1. [Llama-3.2-3B-Instruct-Q8_0.gguf](https://huggingface.co/lmstudio-community/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf?download=true) (3B parameters)
+2. [gemma-2-9b-it-Q4_K_M.gguf](https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true) (9B parameters)
+3. [Mistral-7B-Instruct-v0.3-Q6_K.gguf](https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q6_K.gguf?download=true) (7B parameters)
 
-Download your chosen model and place it in the `models` directory of this project.
+Download your chosen model and place it in the `models` directory of this project. Each model has different capabilities and resource requirements, so choose based on your specific needs and hardware capabilities.
 
 ## Background and Key Libraries
 
@@ -83,6 +84,33 @@ This project leverages two main Python packages:
 These libraries enable us to work with large language models locally and extract structured information from their outputs.
 
 ## Using the Poetry Shell
+
+## Installing and Using Ollama
+
+Ollama is an easy-to-use framework for running large language models locally. To use Ollama with this project:
+
+1. Install Ollama:
+   - For macOS and Linux:
+     ```bash
+     curl https://ollama.ai/install.sh | sh
+     ```
+
+2. Start the Ollama service:
+   ```bash
+   ollama serve
+   ```
+
+3. Pull the Gemma model:
+   ```bash
+   ollama run gemma2:9b
+   ```
+
+4. Run the snowball_chain script without specifying a model path to use Ollama:
+   ```bash
+   poetry run python src/snowball_chain.py --topic "Your blog topic"
+   ```
+
+For more information on using Ollama, visit the [official Ollama documentation](https://ollama.ai/library).
 
 ### Activating the Shell
 
@@ -108,7 +136,7 @@ Remember, deactivating the shell doesn't delete or modify your virtual environme
 
 ## Example Script: Snowball Chain for Blog Post Generation
 
-This repository includes an example script (`src/snowball_chain.py`) that demonstrates a lightweight approach to constructing a prompt chain using a local LLM. This script serves as a basic demonstration of how to work with local LLMs and can be used as a starting point for more complex applications.
+This repository includes an example script (`src/snowball_chain.py`) that demonstrates a lightweight approach to constructing a prompt chain using either a local LLM or an Ollama inference endpoint. This script serves as a basic demonstration of how to work with LLMs and can be used as a starting point for more complex applications.
 
 The snowball prompt concept in this script was inspired by [this gist](https://gist.github.com/disler/d51d7e37c3e5f8d277d8e0a71f4a1d2e) by [disler](https://gist.github.com/disler).
 
@@ -118,17 +146,33 @@ The snowball prompt concept in this script was inspired by [this gist](https://g
 
 2. **Structured Outputs with Instructor**: We use the `instructor` library to ensure the LLM's output is captured in Python classes. This approach allows for easy handling and passing of outputs within the code, maintaining type safety and structure.
 
-3. **Local LLM Integration**: The script demonstrates how to work with local LLMs using the `llama-cpp-python` library, providing a foundation for participants to build upon or use as inspiration for their own implementations.
+3. **Flexible Model Integration**: The script now supports two modes of operation:
+   - Using a local GGUF model with `llama-cpp-python`
+   - Using an Ollama inference endpoint
 
 ### Usage
 
-To run the example script:
+To run the example script with a local GGUF model:
 
 ```bash
 poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
 ```
 
+To run the example script with Ollama:
+
+```bash
+poetry run python src/snowball_chain.py --topic "Your blog topic"
+```
+
 Replace `/path/to/your/gguf/model` with the actual path to your downloaded GGUF model file, and "Your blog topic" with the desired topic for the blog post.
+
+### Using Ollama
+
+If you prefer to use Ollama instead of a local GGUF model, you'll need to install and set up Ollama first:
+
+1. Install Ollama by following the instructions on the [official Ollama website](https://ollama.ai/).
+2. Once installed, you can run Ollama models using the command line or integrate them with this script.
+3. The script is configured to use the "gemma2:27b" model with Ollama. Make sure this model is available in your Ollama installation, or modify the script to use a different model.
 
 ### Script Workflow
 
@@ -140,7 +184,7 @@ Replace `/path/to/your/gguf/model` with the actual path to your downloaded GGUF 
 
 While this script provides a basic demonstration, hackathon participants are encouraged to use this as a starting point and freely modify or extend it to accomplish their specific goals. The modular structure allows for easy additions or alterations to the prompt chain, output structures, or overall workflow.
 
-Remember, this is just one approach to working with local LLMs. Feel free to explore alternative methods or libraries that best suit your project's needs.
+Remember, this is just one approach to working with LLMs. Feel free to explore alternative methods or libraries that best suit your project's needs.
 
 ## Contributing
 
