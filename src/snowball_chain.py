@@ -1,6 +1,7 @@
 import instructor
 import json
 from llama_cpp import Llama
+from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 from instructor import patch
 from pydantic import BaseModel, Field
 from typing import List
@@ -19,16 +20,19 @@ args = parser.parse_args()
 # Initialize the LLM
 llm = Llama(
     model_path=args.model_path,
-    verbose=True,
     n_gpu_layers = -1,
     n_batch=512,
     cache_prompt=False,
     n_ctx=16384,
-
+    draft_model=LlamaPromptLookupDecoding(num_pred_tokens=10),
+    logits_all=True,
+    verbose=False,
 )
+
 
 patched_llm = instructor.patch(
     create=llm.create_chat_completion_openai_v1,
+    mode=instructor.Mode.JSON_SCHEMA,
 )
 
 class blog_title(BaseModel):
@@ -69,7 +73,6 @@ def get_blog_post_title(topic: str) -> blog_title:
             ],
         )
 
-
         # Simulate progress
         for _ in range(10):
             time.sleep(0.1)
@@ -108,7 +111,7 @@ def get_blog_paragraph(title: str, hook: str) -> blog_content:
             response_model=blog_content,
             max_tokens=2048,
             temperature=0.7,
-            max_retries=10,
+            #max_retries=10,
             messages=[
                 {"role": "system", "content": "You are an expert in writing interesting blog posts. You respond in JSON and always include several paragraphs worth of content."},
                 {"role": "user", "content": f"""
