@@ -4,11 +4,24 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
+  - [About the Hackathon](#about-the-hackathon)
+- [Repository Structure](#repository-structure)
 - [Installation](#installation)
+  - [1. Install Poetry](#1-install-poetry)
+  - [2. Install Project Dependencies](#2-install-project-dependencies)
+  - [3. Test the Installation](#3-test-the-installation)
 - [Downloading GGUF Models](#downloading-gguf-models)
 - [Background and Key Libraries](#background-and-key-libraries)
 - [Using the Poetry Shell](#using-the-poetry-shell)
-- [Example Script: Snowball Chain](#example-script-snowball-chain-for-blog-post-generation)
+  - [Activating the Shell](#activating-the-shell)
+  - [Deactivating the Shell](#deactivating-the-shell)
+- [Installing and Using Ollama](#installing-and-using-ollama)
+- [Example Script: Snowball Chain for Blog Post Generation](#example-script-snowball-chain-for-blog-post-generation)
+  - [Key Features](#key-features)
+  - [Usage](#usage)
+  - [Using Ollama](#using-ollama)
+  - [Script Workflow](#script-workflow)
+  - [Customization and Extension](#customization-and-extension)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -85,6 +98,28 @@ These libraries enable us to work with large language models locally and extract
 
 ## Using the Poetry Shell
 
+### Activating the Shell
+
+To activate the Poetry shell and enter the virtual environment, use:
+
+```bash
+poetry shell
+```
+
+This command activates the virtual environment associated with your project.
+
+### Deactivating the Shell
+
+To exit (deactivate) the Poetry shell and return to your normal shell, you can use any of these methods:
+
+1. Type `exit` and press Enter
+2. Use the keyboard shortcut Ctrl+D
+3. Type `deactivate` and press Enter
+
+Any of these methods will exit the Poetry shell and return you to your system's default shell.
+
+Remember, deactivating the shell doesn't delete or modify your virtual environment; it simply exits it. You can always reactivate it later using `poetry shell`.
+
 ## Installing and Using Ollama
 
 Ollama is an easy-to-use framework for running large language models locally. To use Ollama with this project:
@@ -111,28 +146,6 @@ Ollama is an easy-to-use framework for running large language models locally. To
    ```
 
 For more information on using Ollama, visit the [official Ollama documentation](https://ollama.ai/library).
-
-### Activating the Shell
-
-To activate the Poetry shell and enter the virtual environment, use:
-
-```bash
-poetry shell
-```
-
-This command activates the virtual environment associated with your project.
-
-### Deactivating the Shell
-
-To exit (deactivate) the Poetry shell and return to your normal shell, you can use any of these methods:
-
-1. Type `exit` and press Enter
-2. Use the keyboard shortcut Ctrl+D
-3. Type `deactivate` and press Enter
-
-Any of these methods will exit the Poetry shell and return you to your system's default shell.
-
-Remember, deactivating the shell doesn't delete or modify your virtual environment; it simply exits it. You can always reactivate it later using `poetry shell`.
 
 ## Example Script: Snowball Chain for Blog Post Generation
 
@@ -172,7 +185,7 @@ If you prefer to use Ollama instead of a local GGUF model, you'll need to instal
 
 1. Install Ollama by following the instructions on the [official Ollama website](https://ollama.ai/).
 2. Once installed, you can run Ollama models using the command line or integrate them with this script.
-3. The script is configured to use the "gemma2:27b" model with Ollama. Make sure this model is available in your Ollama installation, or modify the script to use a different model.
+3. The script is configured to use the "gemma2:9b" model with Ollama. Make sure this model is available in your Ollama installation, or modify the script to use a different model.
 
 ### Script Workflow
 
