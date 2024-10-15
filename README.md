@@ -135,10 +135,15 @@ Ollama is an easy-to-use framework for running large language models locally. To
    ollama serve
    ```
 
-3. Pull the Gemma model:
+3. Pull the Mistral model:
    ```bash
-   ollama run gemma2:9b
+   ollama pull mistral
    ```
+   or
+   ```bash
+   ollama pull gemma2:9b
+   ```
+   Note: If your laptop has sufficient memory (32GB), you can try other models like mistral-small:latest or gemma2:27b.
 
 4. Run the snowball_chain script without specifying a model path to use Ollama:
    ```bash

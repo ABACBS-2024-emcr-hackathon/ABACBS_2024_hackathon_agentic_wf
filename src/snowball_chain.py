@@ -26,7 +26,7 @@ class ModelWrapper:
     def generate(self, response_model, messages, **kwargs):
         if self.is_ollama:
             return self.model.chat.completions.create(
-                model="gemma2:9b",
+                model="mistral:latest",
                 response_model=response_model,
                 messages=messages,
                 **kwargs
@@ -46,7 +46,7 @@ def create_model(model_path: str = None) -> ModelWrapper:
             n_batch=512,
             chat_format="chatml",
             cache_prompt=False,
-            n_ctx=16384,
+            n_ctx=2048,
             draft_model=LlamaPromptLookupDecoding(num_pred_tokens=10),
             logits_all=True,
             verbose=True,
@@ -79,53 +79,35 @@ class blog_hook(BaseModel):
     )
 
 class blog_content(BaseModel):
-    blog_introduction: str = Field(
-            description="The introduction of the blog post.",
-    )
-    blog_background: str = Field(
-            description="A section providing background to the topic discussed in the blog post.",
-    )
-    blog_mainsection: str = Field(
-            description="The main body og the blog post.",
-    )
-    blog_conclusion: str = Field(
-            description="The conclusion.",
-    )
+    class paragraphs(BaseModel):
+        message: str = Field(description="The main message the paragraph should communicate.")
+        paragraph: str = Field(description="A three to five sentence long paragraph.")
+    content: list[paragraphs]
 
 blog_writer_prompt = """
 # Identity and purpose
 
 You are a highly skilled expert writer tasked with generating a blog post in a structured JSON format.
-The blog post should be divided into the following sections: `blog_introduction`, `blog_background`, `blog_mainsection`, and `blog_conclusion`.
 
 # Instructions:
 
-- You will generate a blog post based on the following **TITLE**: "{title}" and **HOOK**: "{hook}".
-- The blog post should be informative, well-structured, and engaging. Make sure to use smooth transitions between sections.
-- Each section should follow these guidelines:
+- You will generate a blog post based on the following **TITLE** and **HOOK**.
+- The blog post should be informative, well-structured, and engaging. Make sure to use smooth transitions between paragraphs.
+- Each paragraph should clearly communicate one main message and be three to five sentences long.
+- Aim for a total of 5-7 paragraphs in the blog post.
+- Try not to repeat content from the HOOK in the paragraphs. Instead, expand on the ideas presented in the HOOK.
 
-  - **blog_introduction**: Provide a brief, compelling introduction to the topic. Engage the reader with a hook and explain why the topic is relevant or interesting. The introduction should be between 100-150 words and clearly set the stage for the topic.
-  - **blog_background**: Offer detailed background information. Include historical details or context that helps the reader understand the topic's significance. This section should be between 150-200 words and should thoroughly explain any relevant developments or key points leading up to the main discussion.
-  - **blog_mainsection**: Dive deeply into the topic, presenting key points, insights, and analysis. This section should elaborate on the topic comprehensively, addressing various perspectives and providing thoughtful commentary. It should be the longest section, around 300-400 words, and cover the key ideas thoroughly.
-  - **blog_conclusion**: Summarize the main points of the blog post, offer final thoughts, and potentially suggest future directions or a call to action. The conclusion should be around 100-150 words and leave the reader with a clear takeaway or final thought on the subject.
+## TITLE
+{title}
 
-### Output Format:
-- Respond in JSON format with the following fields:
-  - blog_introduction
-  - blog_background
-  - blog_mainsection
-  - blog_conclusion
+## HOOK
+{hook}
+## Output Format:
+- Respond with a list of paragraphs, each containing:
+  - "message": A brief summary of the main point or message of that paragraph
+  - "paragraph": The full text of the paragraph (3-5 sentences)
 
-### Example Output:
-
-{{{{
-  "blog_introduction": "In recent years, AI has transformed various industries. One of the most notable areas where AI has made a significant impact is healthcare. In this post, we explore how AI is revolutionizing medical diagnostics.",
-  "blog_background": "AI in healthcare is not a new concept. From the early days of expert systems to today's deep learning models, the application of AI has continuously evolved. However, recent advancements have made AI more accessible and powerful, allowing for more precise diagnoses and treatment plans.",
-  "blog_mainsection": "One of the key breakthroughs in AI for healthcare is its ability to process vast amounts of data quickly. For example, AI algorithms can analyze medical images, detect anomalies, and assist in diagnosing conditions that may be difficult for human doctors to identify. Furthermore, AI-powered tools can assist in predictive analytics, helping healthcare professionals foresee potential complications before they arise.",
-  "blog_conclusion": "In conclusion, AI is poised to continue reshaping the healthcare landscape. Its ability to improve diagnostics, personalize treatment plans, and analyze complex data is transforming how doctors care for patients. As we move forward, the integration of AI in healthcare will only deepen, promising better outcomes and more efficient medical practices."
-}}}}
-
-Ensure the content is clearly written, informative, and maintains a consistent tone throughout.
+Ensure the content is clearly written, informative, and maintains a consistent tone throughout. Aim for 5-7 paragraphs in total.
 """
 
 
@@ -159,7 +141,10 @@ def get_blog_hook(title: str) -> blog_hook:
             messages=[
                 {"role": "user",
                     "content":f"""
-                        Generate one hook for the blog post title: {title}
+                        Create an engaging hook for a blog post titled ‘{title}.’
+                        The hook should be a thought-provoking statement or question that draws readers in,
+                        highlighting the significance of precision medicine and its impact on healthcare. Aim
+                        for a tone that is informative yet captivating.
                         Your response should be in the format of a JSON object.
                         """
                 },
@@ -194,17 +179,39 @@ def get_blog_paragraph(title: str, hook: str) -> blog_content:
 
     return response
 
+
+# Print the blog content with aligned labels
+def wrap_text(text, width, indent):
+    lines = []
+    for paragraph in text.split('\n'):
+        words = paragraph.split()
+        current_line = indent
+        for word in words:
+            if len(current_line) + len(word) + 1 <= width + len(indent):
+                current_line += " " + word if current_line != indent else word
+            else:
+                lines.append(current_line)
+                current_line = indent + word
+        if current_line:
+            lines.append(current_line)
+    return '\n'.join(lines)
+
 if __name__ == "__main__":
     try:
         # Use command-line arguments
         title = get_blog_post_title(args.topic)
-        print(f"Title: {title.blog_title}")
+
         hook = get_blog_hook(title.blog_title)
-        print(f"Hook: {hook.blog_hook}")
-        paragraph = get_blog_paragraph(title.blog_title, hook.blog_hook)
-        print(f"Intro: {paragraph.blog_introduction}")
-        print(f"Background: {paragraph.blog_background}")
-        print(f"Main Section: {paragraph.blog_mainsection}")
-        print(f"Conclusion: {paragraph.blog_conclusion}")
+
+        body = get_blog_paragraph(title.blog_title, hook.blog_hook)
+
+        print(f"Title:\n{wrap_text(title.blog_title, 78, ' '*22)}")
+        print(f"Hook:\n{wrap_text(hook.blog_hook, 78, ' '*22)}")
+        for i, section in enumerate(body.content, 1):
+            print(f"\nSection #{i}:")
+            print(f"Paragraph:\n{wrap_text(section.paragraph, 78, ' '*22)}")
+            print(f"Message:\n{wrap_text(section.message, 78 , ' '*22)}")
+            print("-" * 50)  # Print a separator line
+
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")
