@@ -49,7 +49,7 @@ def create_model(model_path: str = None) -> ModelWrapper:
             n_ctx=2048,
             draft_model=LlamaPromptLookupDecoding(num_pred_tokens=10),
             logits_all=True,
-            verbose=True,
+            verbose=False,
         )
         patched_llm = instructor.patch(
             create=llm.create_chat_completion_openai_v1,
