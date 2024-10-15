@@ -20,6 +20,13 @@ This repository contains the Agentic Workflow project for the ABACBS 2024 Hackat
 
 The ABACBS 2024 Hackathon is an event organized by the Australian Bioinformatics and Computational Biology Society. This project serves as a starting point for participants interested in exploring agentic workflows with local LLMs. For more information about the hackathon, please visit the ABACBS website.
 
+## Repository Structure
+
+- `src/`: Contains the main project code, including the example script.
+- `models/`: Directory for storing downloaded GGUF model files.
+- `snippets/`: Personal code snippets and examples (not for hackathon use).
+
+
 ## Installation
 
 ### 1. Install Poetry
