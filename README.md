@@ -76,16 +76,6 @@ If you encounter any issues:
 - Check that your Python version is compatible (this project requires Python 3.8+)
 - If you face any compilation errors related to llama-cpp-python, you might need to install additional system libraries. Refer to the [llama-cpp-python documentation](https://github.com/abetlen/llama-cpp-python) for platform-specific instructions.
 
-## Downloading GGUF Models
-
-To use this project, you'll need to download a GGUF-formatted language model. Here are some options:
-
-1. [Llama-3.2-3B-Instruct-Q8_0.gguf](https://huggingface.co/lmstudio-community/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf?download=true) (3B parameters)
-2. [gemma-2-9b-it-Q4_K_M.gguf](https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true) (9B parameters)
-3. [Mistral-7B-Instruct-v0.3-Q6_K.gguf](https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q6_K.gguf?download=true) (7B parameters)
-
-Download your chosen model and place it in the `models` directory of this project. Each model has different capabilities and resource requirements, so choose based on your specific needs and hardware capabilities.
-
 ## Background and Key Libraries
 
 This project leverages two main Python packages:
@@ -152,6 +142,26 @@ Ollama is an easy-to-use framework for running large language models locally. To
 
 For more information on using Ollama, visit the [official Ollama documentation](https://ollama.ai/library).
 
+## Downloading GGUF Models
+
+If you prefer to use local GGUF models instead of Ollama, follow these steps:
+
+1. Choose and download a GGUF-formatted language model. Here are some options:
+
+   - [Llama-3.2-3B-Instruct-Q8_0.gguf](https://huggingface.co/lmstudio-community/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf?download=true) (3B parameters)
+   - [gemma-2-9b-it-Q4_K_M.gguf](https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true) (9B parameters)
+   - [Mistral-7B-Instruct-v0.3-Q6_K.gguf](https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q6_K.gguf?download=true) (7B parameters)
+
+2. Place the downloaded model in the `models` directory of this project.
+
+3. When running the script (see below), specify the path to your GGUF model:
+
+   ```bash
+   poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
+   ```
+
+Choose a model based on your specific needs and hardware capabilities. Each model has different resource requirements and performance characteristics.
+
 ## Example Script: Snowball Chain for Blog Post Generation
 
 This repository includes an example script (`src/snowball_chain.py`) that demonstrates a lightweight approach to constructing a prompt chain using either a local LLM or an Ollama inference endpoint. This script serves as a basic demonstration of how to work with LLMs and can be used as a starting point for more complex applications.
@@ -170,16 +180,16 @@ The snowball prompt concept in this script was inspired by [this gist](https://g
 
 ### Usage
 
-To run the example script with a local GGUF model:
-
-```bash
-poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
-```
-
 To run the example script with Ollama:
 
 ```bash
 poetry run python src/snowball_chain.py --topic "Your blog topic"
+```
+
+To run the example script with a local GGUF model:
+
+```bash
+poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
 ```
 
 Replace `/path/to/your/gguf/model` with the actual path to your downloaded GGUF model file, and "Your blog topic" with the desired topic for the blog post.
