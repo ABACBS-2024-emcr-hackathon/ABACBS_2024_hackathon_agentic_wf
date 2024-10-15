@@ -1,25 +1,24 @@
-# ABACBS 2024 Hackathon Agentic Workflow
-
-[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
+# ABACBS 2024 Hackathon - Agentic Workflow Project
 
 ## Table of Contents
+
 - [Introduction](#introduction)
-  - [About the Hackathon](#about-the-hackathon)
+- [About the Hackathon](#about-the-hackathon)
 - [Repository Structure](#repository-structure)
-- [Installation](#installation)
-  - [1. Install Poetry](#1-install-poetry)
-  - [2. Install Project Dependencies](#2-install-project-dependencies)
-  - [3. Test the Installation](#3-test-the-installation)
-- [Downloading GGUF Models](#downloading-gguf-models)
 - [Background and Key Libraries](#background-and-key-libraries)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [1. Install Poetry](#1-install-poetry)
+  - [2. Clone the Repository and Install Dependencies](#2-clone-the-repository-and-install-dependencies)
+  - [3. Test the Installation](#3-test-the-installation)
 - [Using the Poetry Shell](#using-the-poetry-shell)
   - [Activating the Shell](#activating-the-shell)
   - [Deactivating the Shell](#deactivating-the-shell)
 - [Installing and Using Ollama](#installing-and-using-ollama)
+- [Downloading GGUF Models](#downloading-gguf-models)
 - [Example Script: Snowball Chain for Blog Post Generation](#example-script-snowball-chain-for-blog-post-generation)
   - [Key Features](#key-features)
   - [Usage](#usage)
-  - [Using Ollama](#using-ollama)
   - [Script Workflow](#script-workflow)
   - [Customization and Extension](#customization-and-extension)
 - [Contributing](#contributing)
@@ -27,205 +26,224 @@
 
 ## Introduction
 
-This repository contains the Agentic Workflow project for the ABACBS 2024 Hackathon. It utilizes Python packages such as llama-cpp-python and instructor to work with local large language models (LLMs) in GGUF format.
+This repository contains the Agentic Workflow project for the ABACBS 2024 Hackathon. The project demonstrates how to work with local Large Language Models (LLMs) in GGUF format using Python. It includes an example script that showcases a lightweight approach to constructing a prompt chain for generating blog posts.
 
-### About the Hackathon
+## About the Hackathon
 
-The ABACBS 2024 Hackathon is an event organized by the Australian Bioinformatics and Computational Biology Society. This project serves as a starting point for participants interested in exploring agentic workflows with local LLMs. For more information about the hackathon, please visit the ABACBS website.
+The ABACBS 2024 Hackathon is an event organized by the Australian Bioinformatics and Computational Biology Society. This project serves as a starting point for participants interested in exploring agentic workflows with local LLMs. For more information, please visit the ABACBS website.
 
 ## Repository Structure
 
-- `src/`: Contains the main project code, including the example script.
+- `src/`: Contains the main project code, including the example script `snowball_chain.py`.
 - `models/`: Directory for storing downloaded GGUF model files.
-- `snippets/`: Personal code snippets and examples (not for hackathon use).
+- `snippets/`: Personal code snippets and examples (optional, not intended for hackathon use).
 
+## Background and Key Libraries
+
+This project leverages two main Python packages:
+
+1. **llama-cpp-python**: A Python binding for the llama.cpp library, enabling efficient inference of LLaMA models locally. [GitHub Repository](https://github.com/abetlen/llama-cpp-python)
+2. **instructor**: A library for structured outputs with LLMs, simplifying the handling of complex data structures. [GitHub Repository](https://github.com/jxnl/instructor)
+
+These libraries allow for working with large language models on your local machine and extracting structured information from their outputs.
 
 ## Installation
 
+### Prerequisites
+
+- **Python 3.8 or higher**: Ensure you have Python installed. You can check your version with:
+  ```
+  python3 --version
+  ```
+- **Git**: To clone the repository.
+- **System Dependencies**: Depending on your operating system, you may need to install additional libraries for llama-cpp-python. Refer to the [llama-cpp-python installation guide](https://github.com/abetlen/llama-cpp-python#installation) for details.
+
 ### 1. Install Poetry
 
-Poetry is a dependency management and packaging tool for Python. To install Poetry, run the following command in your terminal:
+Poetry is a dependency management and packaging tool for Python. Install Poetry by running:
 
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-For more detailed instructions or alternative installation methods, visit the [official Poetry documentation](https://python-poetry.org/docs/#installation).
+After installation, ensure Poetry is added to your system's PATH. You may need to restart your terminal or follow any additional instructions provided by the installer.
 
-### 2. Install Project Dependencies
+For alternative installation methods, visit the [official Poetry documentation](https://python-poetry.org/docs/#installation).
 
-Clone this repository and navigate to the project directory. Then run:
+### 2. Clone the Repository and Install Dependencies
+
+Clone this repository and navigate to the project directory:
+
+```bash
+git clone https://github.com/yourusername/abacbs-2024-agentic-workflow.git
+cd abacbs-2024-agentic-workflow
+```
+
+Install the project dependencies using Poetry:
 
 ```bash
 poetry install
 ```
 
-This command will create a virtual environment and install all the necessary dependencies specified in the `pyproject.toml` file.
+This command creates a virtual environment and installs all necessary dependencies specified in the `pyproject.toml` file.
 
 ### 3. Test the Installation
 
-To ensure everything is set up correctly, activate the virtual environment and run a test script:
+Activate the virtual environment and run a test script:
 
 ```bash
 poetry shell
 python -c "import llama_cpp; import instructor; print('Installation successful!')"
 ```
 
-If you encounter any issues:
-- Make sure you have the latest version of Poetry installed
-- Check that your Python version is compatible (this project requires Python 3.8+)
-- If you face any compilation errors related to llama-cpp-python, you might need to install additional system libraries. Refer to the [llama-cpp-python documentation](https://github.com/abetlen/llama-cpp-python) for platform-specific instructions.
+If you see "Installation successful!", you're all set.
 
-## Background and Key Libraries
+Troubleshooting:
 
-This project leverages two main Python packages:
-
-1. **llama-cpp-python**: A Python binding for the llama.cpp library, which allows for efficient inference of LLaMA models. [GitHub Repository](https://github.com/abetlen/llama-cpp-python)
-
-2. **instructor**: A library for structured outputs with LLMs, making it easier to work with complex data structures. [GitHub Repository](https://github.com/jxnl/instructor)
-
-These libraries enable us to work with large language models locally and extract structured information from their outputs.
+- **Poetry Not Found**: Ensure that Poetry is added to your PATH.
+- **Python Version**: Confirm you're using Python 3.8 or higher.
+- **Compilation Errors**: If you encounter errors related to llama-cpp-python, install the required system libraries. Refer to the installation guide for assistance.
 
 ## Using the Poetry Shell
 
 ### Activating the Shell
 
-To activate the Poetry shell and enter the virtual environment, use:
+Enter the virtual environment:
 
 ```bash
 poetry shell
 ```
 
-This command activates the virtual environment associated with your project.
+You'll see your shell prompt change to indicate you're now inside the virtual environment.
 
 ### Deactivating the Shell
 
-To exit (deactivate) the Poetry shell and return to your normal shell, you can use any of these methods:
+To exit the virtual environment:
 
-1. Type `exit` and press Enter
-2. Use the keyboard shortcut Ctrl+D
-3. Type `deactivate` and press Enter
+- Type `exit` and press Enter, or
+- Press Ctrl+D.
 
-Any of these methods will exit the Poetry shell and return you to your system's default shell.
-
-Remember, deactivating the shell doesn't delete or modify your virtual environment; it simply exits it. You can always reactivate it later using `poetry shell`.
+Note: The `deactivate` command is not applicable when using Poetry's shell.
 
 ## Installing and Using Ollama
 
-Ollama is an easy-to-use framework for running large language models locally. To use Ollama with this project:
+Ollama is a framework for running large language models locally, providing an alternative to using GGUF models directly.
 
-1. Install Ollama:
-   - For macOS and Linux:
-     ```bash
-     curl https://ollama.ai/install.sh | sh
-     ```
+### Install Ollama
 
-2. Start the Ollama service:
-   ```bash
-   ollama serve
-   ```
+For macOS and Linux:
 
-3. Pull the Mistral model:
-   ```bash
-   ollama pull mistral
-   ```
-   or
-   ```bash
-   ollama pull gemma2:9b
-   ```
-   Note: If your laptop has sufficient memory (32GB), you can try other models like mistral-small:latest or gemma2:27b.
+```bash
+curl https://ollama.ai/install.sh | bash
+```
 
-4. Run the snowball_chain script without specifying a model path to use Ollama:
-   ```bash
-   poetry run python src/snowball_chain.py --topic "Your blog topic"
-   ```
+Note: Always review scripts before running them to ensure they're safe.
 
-For more information on using Ollama, visit the [official Ollama documentation](https://ollama.ai/library).
+For more details, visit the [official Ollama documentation](https://ollama.ai/download).
 
-## Downloading GGUF Models
+### Start the Ollama Service
 
-If you prefer to use local GGUF models instead of Ollama, follow these steps:
+```bash
+ollama serve
+```
 
-1. Choose and download a GGUF-formatted language model. Here are some options:
+This command starts the Ollama server, which handles model inference requests.
 
-   - [Llama-3.2-3B-Instruct-Q8_0.gguf](https://huggingface.co/lmstudio-community/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q8_0.gguf?download=true) (3B parameters)
-   - [gemma-2-9b-it-Q4_K_M.gguf](https://huggingface.co/lmstudio-community/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true) (9B parameters)
-   - [Mistral-7B-Instruct-v0.3-Q6_K.gguf](https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q6_K.gguf?download=true) (7B parameters)
+### Pull a Model
 
-2. Place the downloaded model in the `models` directory of this project.
+Download a model compatible with Ollama:
 
-3. When running the script (see below), specify the path to your GGUF model:
+- Mistral Model:
+  ```bash
+  ollama pull mistral
+  ```
 
-   ```bash
-   poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
-   ```
+- Llama 2 (9B):
+  ```bash
+  ollama pull llama2:9b
+  ```
 
-Choose a model based on your specific needs and hardware capabilities. Each model has different resource requirements and performance characteristics.
+#### Hardware Requirements
 
-## Example Script: Snowball Chain for Blog Post Generation
+- Models vary in size; ensure your system has enough RAM.
+- The 7B and 9B models typically require at least 16GB of RAM.
+- Larger models (e.g., 70B) require significantly more resources.
 
-This repository includes an example script (`src/snowball_chain.py`) that demonstrates a lightweight approach to constructing a prompt chain using either a local LLM or an Ollama inference endpoint. This script serves as a basic demonstration of how to work with LLMs and can be used as a starting point for more complex applications.
+### Using Ollama with the Script
 
-The snowball prompt concept in this script was inspired by [this gist](https://gist.github.com/disler/d51d7e37c3e5f8d277d8e0a71f4a1d2e) by [disler](https://gist.github.com/disler).
-
-### Key Features
-
-1. **Lightweight Prompt Chain**: The script showcases an extremely lightweight approach to constructing a prompt chain, where the output of one LLM call is used as input for the next call. This creates a "snowball effect" in generating content.
-
-2. **Structured Outputs with Instructor**: We use the `instructor` library to ensure the LLM's output is captured in Python classes. This approach allows for easy handling and passing of outputs within the code, maintaining type safety and structure.
-
-3. **Flexible Model Integration**: The script now supports two modes of operation:
-   - Using a local GGUF model with `llama-cpp-python`
-   - Using an Ollama inference endpoint
-
-### Usage
-
-To run the example script with Ollama:
+Run the `snowball_chain.py` script without specifying a model path to use Ollama:
 
 ```bash
 poetry run python src/snowball_chain.py --topic "Your blog topic"
 ```
 
-To run the example script with a local GGUF model:
+## Downloading GGUF Models
 
+If you prefer to use local GGUF models with llama-cpp-python, follow these steps:
+
+1. Select a GGUF Model:
+   - [Llama 2 7B Chat (Q4_K_M)](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf)
+   - [Mistral 7B Instruct (Q4_K_M)](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_M.gguf)
+
+   Note: Choose a model compatible with your system's RAM.
+
+2. Place the Model in the `models/` Directory:
+   ```bash
+   mkdir -p models
+   mv /path/to/downloaded/model.gguf models/
+   ```
+
+3. Run the Script with the Model Path:
+   ```bash
+   poetry run python src/snowball_chain.py --model_path models/model.gguf --topic "Your blog topic"
+   ```
+
+   Replace `model.gguf` with the actual filename of the model you downloaded.
+
+## Example Script: Snowball Chain for Blog Post Generation
+
+This project includes an example script (`src/snowball_chain.py`) demonstrating how to build a prompt chain using either a local LLM or an Ollama endpoint.
+
+### Key Features
+
+1. **Lightweight Prompt Chain**: Creates a "snowball effect" by feeding the output of one LLM call into the next.
+2. **Structured Outputs with Instructor**: Uses the `instructor` library to capture outputs in structured Python classes.
+3. **Flexible Model Integration**: Supports both local GGUF models and Ollama inference endpoints.
+
+### Usage
+
+With Ollama:
 ```bash
-poetry run python src/snowball_chain.py --model_path /path/to/your/gguf/model --topic "Your blog topic"
+poetry run python src/snowball_chain.py --topic "Your blog topic"
 ```
 
-Replace `/path/to/your/gguf/model` with the actual path to your downloaded GGUF model file, and "Your blog topic" with the desired topic for the blog post.
-
-### Using Ollama
-
-If you prefer to use Ollama instead of a local GGUF model, you'll need to install and set up Ollama first:
-
-1. Install Ollama by following the instructions on the [official Ollama website](https://ollama.ai/).
-2. Once installed, you can run Ollama models using the command line or integrate them with this script.
-3. The script is configured to use the "gemma2:9b" model with Ollama. Make sure this model is available in your Ollama installation, or modify the script to use a different model.
+With a Local GGUF Model:
+```bash
+poetry run python src/snowball_chain.py --model_path models/model.gguf --topic "Your blog topic"
+```
 
 ### Script Workflow
 
-1. The script first generates a blog post title based on the given topic.
-2. It then creates a hook for the blog post using the generated title.
-3. Finally, it generates the full content of the blog post, including introduction, background, main section, and conclusion.
+1. Generate a Blog Post Title: Based on the provided topic.
+2. Create a Hook: Develop a compelling introduction.
+3. Generate Full Content: Includes sections like introduction, background, main content, and conclusion.
 
 ### Customization and Extension
 
-While this script provides a basic demonstration, hackathon participants are encouraged to use this as a starting point and freely modify or extend it to accomplish their specific goals. The modular structure allows for easy additions or alterations to the prompt chain, output structures, or overall workflow.
+Feel free to modify the script to suit your needs:
 
-Remember, this is just one approach to working with LLMs. Feel free to explore alternative methods or libraries that best suit your project's needs.
+- **Adjust Prompts**: Customize the prompts to change how the LLM generates content.
+- **Change Models**: Experiment with different models to see how outputs vary.
+- **Extend Functionality**: Add new steps to the prompt chain for more complex workflows.
 
 ## Contributing
 
-This project was created for the ABACBS 2024 Hackathon and is provided as-is for demonstration and learning purposes. While there are no formal contribution guidelines, you are welcome to use, modify, and extend the code as you see fit for your own projects or during the hackathon.
+This project was created for the ABACBS 2024 Hackathon and is provided as-is for educational purposes. You're welcome to use, modify, and extend the code for your projects.
 
 Please note:
-- This repository is not actively maintained.
-- There is no expectation of ongoing development or updates after the hackathon.
-- Feel free to fork the repository and adapt it to your needs.
-- If you discover any critical issues or have suggestions, you can open an issue, but please be aware that responses may be limited or not forthcoming.
-
-The primary goal is to provide a starting point and inspiration for working with local LLMs. We encourage you to experiment, learn, and build upon this code in whatever way serves your projects best.
+- **Maintenance**: This repository is not actively maintained post-hackathon.
+- **Issues**: You can open issues, but they may not be addressed promptly.
 
 ## License
 
-This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
+[Insert your chosen license here]
