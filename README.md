@@ -158,9 +158,11 @@ Download a model compatible with Ollama:
   ollama pull mistral
   ```
 
+  Note: The example script is currently hard-coded to use the Mistral model.
+
 - Llama 2 (9B):
   ```bash
-  ollama pull llama2:9b
+  ollama pull llama3.2:3b
   ```
 
 #### Hardware Requirements
