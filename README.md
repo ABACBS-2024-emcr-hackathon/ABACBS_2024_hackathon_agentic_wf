@@ -75,8 +75,8 @@ For alternative installation methods, visit the [official Poetry documentation](
 Clone this repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/yourusername/abacbs-2024-agentic-workflow.git
-cd abacbs-2024-agentic-workflow
+git clone https://github.com/TimoLassmann/ABACBS_2024_hackathon_agentic_wf.git
+cd ABACBS_2024_hackathon_agentic_wf
 ```
 
 Install the project dependencies using Poetry:
