@@ -17,10 +17,8 @@ from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 from instructor import patch
 from pydantic import BaseModel, Field
 from typing import List
-
 from tqdm import tqdm
 import time
-
 import argparse
 
 # Set up the argument parser
