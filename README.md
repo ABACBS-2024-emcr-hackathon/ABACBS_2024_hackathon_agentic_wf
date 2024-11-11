@@ -30,7 +30,9 @@ This repository contains the Agentic Workflow project for the ABACBS 2024 Hackat
 
 ## About the Hackathon
 
-The ABACBS 2024 Hackathon is an event organized by the Australian Bioinformatics and Computational Biology Society. This project serves as a starting point for participants interested in exploring agentic workflows with local LLMs. The challenge which we set on the day was the learn how to use a local LLM to parse soft files from the Gene Expression Omnibus (GEO) and extract key pieces of information. 
+The ABACBS 2024 Hackathon is an event organized by the Australian Bioinformatics and Computational Biology Society. This project serves as a starting point for participants interested in exploring agentic workflows with local LLMs. 
+
+The challenge which we set on the day was the learn how to use a local LLM to parse soft files from the Gene Expression Omnibus (GEO) and extract key pieces of information. There are two solutions to that listed above. 
 
 ## Repository Structure
 
